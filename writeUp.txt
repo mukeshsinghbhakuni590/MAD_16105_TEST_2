@@ -1,0 +1,86 @@
+->Structures
+
+
+Cashier {
+  CashierId  string
+  TimeToProcess  int
+}
+
+Customers{
+   CustomerId  int
+   Name string
+}
+
+
+
+
+Slots{
+  CashierStatus []bool
+  AvaialibleSlots chan   // channel buffered to 3(n) for no of cashiers
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+The first structure shows the cashiers structure which will contain an id ,
+The Time To process the customer which is fixed for every customer.
+
+The second structure is the customer which has its id and the name of the customer 
+
+
+The fourth structure is the Slots which will keep track that each customer is processed parallely. It contains the available slots which is a buffered channel buffered to 3 for 3 cashiers and the status of the three cashiers.
+//////////////////////////////////////////////////////////////////////////////////////////////////  
+
+
+->Mechanism
+
+1. there will a function that will iterate over the customers and process them parallely .
+2. there will be a process function that will wait for the timePerCustomer seconds
+3. Thirdly as the cashier slots gets free the next customer will go to the cashier
+
+
+
+
+func process(msg chan <- int,timeToProcess int,customerId int) {
+        fmt.Println("customer",customerId,"processed") 
+	time.Sleep(timeToProcess * time.Second)
+	msg<-1
+}
+
+
+
+func processCustomers(customers int,cashiers int,timePerCustomer int) {
+	slots := Slots{
+            CashierStatus : [cashiers]int{0},
+            AvaialibleSlots : make(chan int,cashiers)
+        }
+        for i := range(customers) {
+           customer := Customers{ CustomerId : i}
+           mutex := sync.Mutex{}
+           mutex.Lock()
+           go process(slots.AvaialibleSlots,timePerCustomer,i)
+           mutex.Unlock()     
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
