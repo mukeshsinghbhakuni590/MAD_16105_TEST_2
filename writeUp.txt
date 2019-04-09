@@ -3,7 +3,6 @@
 
 Cashier {
   CashierId  string
-  TimeToProcess  int
 }
 
 Customers{
@@ -22,8 +21,7 @@ Slots{
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-The first structure shows the cashiers structure which will contain an id ,
-The Time To process the customer which is fixed for every customer.
+The first structure shows the cashiers structure which will contain an id 
 
 The second structure is the customer which has its id and the name of the customer 
 
